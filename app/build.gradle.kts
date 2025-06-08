@@ -12,7 +12,7 @@ buildscript {
 }
 
 android {
-    namespace = "hluchan.fri.uniza.inventarizciadomcnosti"
+    namespace = "hluchan.fri.uniza.inventardoma"
     compileSdk = 35
 
     defaultConfig {
