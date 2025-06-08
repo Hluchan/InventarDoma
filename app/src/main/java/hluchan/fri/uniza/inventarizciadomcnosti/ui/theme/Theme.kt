@@ -11,6 +11,10 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
+/**
+ * Farby prebrate z catpuccin palety na githube - https://github.com/catppuccin/palette
+ * tento subor je vytvoreny za pomoci AI.
+ */
 // --- Catppuccin Latte for Light Theme ---
 private val CatppuccinLatteLightColorScheme = lightColorScheme(
     primary = CatppuccinLatteSky,

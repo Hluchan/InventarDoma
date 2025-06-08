@@ -2,6 +2,10 @@ package hluchan.fri.uniza.inventarizciadomcnosti.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Farby prebrate z catpuccin palety na githube - https://github.com/catppuccin/palette
+ * tento subor je vytvoreny za pomoci AI
+ */
 // --- Catppuccin Latte Palette (for Light Theme) ---
 val CatppuccinLatteRosewater = Color(0xFFdc8a78)
 val CatppuccinLatteFlamingo = Color(0xFFdd7878)
