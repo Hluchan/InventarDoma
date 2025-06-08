@@ -24,4 +24,6 @@
     <string name="item_edited">Položka upravená.</string>
     <string name="item_deleted">Položka bola zmazaná.</string>
     <string name="edit_item">Upraviť položku</string>
+    <string name="is_borrowed">Je požičané?</string>
+    <string name="borrowed_to_name">Požičané komu</string>
 </resources>
