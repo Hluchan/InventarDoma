@@ -26,4 +26,5 @@
     <string name="edit_item">Upraviť položku</string>
     <string name="is_borrowed">Je požičané?</string>
     <string name="borrowed_to_name">Požičané komu</string>
+    <string name="edit_location">Upraviť lokáciu</string>
 </resources>

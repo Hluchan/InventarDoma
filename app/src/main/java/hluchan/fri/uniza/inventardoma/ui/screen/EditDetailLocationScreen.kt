@@ -91,11 +91,10 @@ fun EditDetailLocationScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(MaterialTheme.colorScheme.onBackground)
         ) {
             // hlavicka
             Text(
-                text = "Upraviť lokáciu",
+                text = stringResource(R.string.edit_location),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
