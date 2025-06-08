@@ -312,26 +312,44 @@ fun EditDetailItemScreen(
 
                     //datum navratu
                     item {
+
+                        // Nefunkcna implementacia datepickeru
+//                        TextField(
+//                            value = returnDateState.value,
+//                            onValueChange = {},
+//                            label = { Text(stringResource(R.string.return_date_label)) },
+//                            readOnly = true,
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(horizontal = 16.dp)
+//                                .clickable {
+//                                    DatePickerDialog(
+//                                        context,
+//                                        { _, year, month, dayOfMonth ->
+//                                            calendar.set(year, month, dayOfMonth)
+//                                            returnDateState.value = dateFormat.format(calendar.time)
+//                                        },
+//                                        calendar.get(Calendar.YEAR),
+//                                        calendar.get(Calendar.MONTH),
+//                                        calendar.get(Calendar.DAY_OF_MONTH)
+//                                    ).show()
+//                                },
+//                            colors = TextFieldDefaults.colors(
+//                                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+//                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+//                                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+//                                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+//                            )
+//                        )
+
                         TextField(
                             value = returnDateState.value,
-                            onValueChange = {},
+                            onValueChange = { returnDateState.value = it },
                             label = { Text(stringResource(R.string.return_date_label)) },
-                            readOnly = true,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .clickable {
-                                    DatePickerDialog(
-                                        context,
-                                        { _, year, month, dayOfMonth ->
-                                            calendar.set(year, month, dayOfMonth)
-                                            returnDateState.value = dateFormat.format(calendar.time)
-                                        },
-                                        calendar.get(Calendar.YEAR),
-                                        calendar.get(Calendar.MONTH),
-                                        calendar.get(Calendar.DAY_OF_MONTH)
-                                    ).show()
-                                },
+                                .padding(horizontal = 16.dp),
+                            singleLine = true,
                             colors = TextFieldDefaults.colors(
                                 focusedTextColor = MaterialTheme.colorScheme.onSurface,
                                 focusedContainerColor = MaterialTheme.colorScheme.surface,
