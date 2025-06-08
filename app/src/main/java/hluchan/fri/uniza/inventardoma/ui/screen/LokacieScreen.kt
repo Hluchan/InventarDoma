@@ -78,15 +78,14 @@ fun LokacieScreen(
             color = MaterialTheme.colorScheme.onBackground
         )
 
-        // TODO - search??
-
         // Zoznam lokacií
         LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             item {
-                AddLocatinCard {
+                AddLocationCard {
                     navController.navigate("addLocation")
                 }
             }
@@ -107,7 +106,7 @@ fun LokacieScreen(
  * do obrazovky ako pridavanie lokacie do DB.
  */
 @Composable
-fun AddLocatinCard(onClick: () -> Unit) {
+fun AddLocationCard(onClick: () -> Unit) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -120,11 +119,11 @@ fun AddLocatinCard(onClick: () -> Unit) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(20.dp)
+                .padding(16.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
-                contentDescription = "Pridať lokáciu",
+                contentDescription = stringResource(R.string.add_new_location),
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .size(40.dp)
@@ -132,13 +131,12 @@ fun AddLocatinCard(onClick: () -> Unit) {
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
                         shape = CircleShape
                     )
-                    .padding(8.dp)
             )
 
-            Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
             Text(
-                text = "Pridať novú lokáciu",
+                text = stringResource(R.string.add_new_location),
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -160,11 +158,12 @@ fun LocationCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(8.dp)
+            .padding(16.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
                 painter = getIconPainter(location.iconName),

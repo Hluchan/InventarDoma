@@ -209,15 +209,14 @@ fun AddLocationScreen(
             shape = MaterialTheme.shapes.small,
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.8f),
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                contentColor = MaterialTheme.colorScheme.onSecondary,
+                disabledContainerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f)
             )
         ) {
             Text(
                 text = stringResource(id = R.string.save),
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
+                fontWeight = FontWeight.Bold
             )
         }
     }

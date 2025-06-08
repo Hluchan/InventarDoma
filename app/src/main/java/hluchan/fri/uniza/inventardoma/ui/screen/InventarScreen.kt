@@ -101,6 +101,7 @@ fun InventarScreen(
             onSearch = { searchQuery = it }
         )
 
+        // zoznam poloziek
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(16.dp),
@@ -171,6 +172,7 @@ fun ItemCard(
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // cely tento if riesi to ze ked nie je obrazok tak tam da placeholder vo farbe temy
@@ -236,7 +238,7 @@ fun AddItemCard(onClick: () -> Unit) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(20.dp)
+                .padding(16.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
@@ -248,13 +250,12 @@ fun AddItemCard(onClick: () -> Unit) {
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
                         shape = CircleShape
                     )
-                    .padding(8.dp)
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
             Text(
-                text = "Pridať novú položku",
+                text = stringResource(R.string.add_new_item),
                 style = MaterialTheme.typography.titleMedium
             )
         }

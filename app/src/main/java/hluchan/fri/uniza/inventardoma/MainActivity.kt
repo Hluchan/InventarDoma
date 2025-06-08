@@ -15,7 +15,6 @@ import androidx.navigation.compose.rememberNavController
 import hluchan.fri.uniza.inventardoma.ui.navigation.AppBottomNavigationBar
 import hluchan.fri.uniza.inventardoma.ui.screen.AddItemScreen
 import hluchan.fri.uniza.inventardoma.ui.screen.AddLocationScreen
-import hluchan.fri.uniza.inventardoma.ui.screen.AppScreen
 import hluchan.fri.uniza.inventardoma.ui.screen.InventarScreen
 import hluchan.fri.uniza.inventardoma.ui.screen.KalendarScreen
 import hluchan.fri.uniza.inventardoma.ui.screen.LokacieScreen
