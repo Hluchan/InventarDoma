@@ -5,15 +5,13 @@ Jednoduchá aplikácia na správu a sledovanie majetku a vybavenia vo vašej dom
 
 # Funkcie
 
-  ☐ Pridávanie položiek.
+  ☑ Pridávanie položiek.
   
-  ☐ Kategórie: Organizujte položky do vlastných kategórií.
+  ☑ Kategórie: Organizujte položky do vlastných kategórií.
   
-  ☐ Fotografie položiek: Pridajte fotky pre lepšiu identifikáciu.
+  ☑ Fotografie položiek: Pridajte fotky pre lepšiu identifikáciu.
   
   ☑ Vyhľadávanie a filtrovanie: Rýchly prístup k položkám podľa názvu.
-  
-  ☐ Export a zálohovanie: Export do CSV alebo PDF a zálohovanie dát.
   
   ☑ Offline prístup: Práca s dátami aj bez internetu.
   
