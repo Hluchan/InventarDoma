@@ -15,4 +15,7 @@
     <string name="location">Lokácia</string>
     <string name="choose_photo">Vybrať fotku</string>
     <string name="add_new_item">Pridať novú položku</string>
+    <string name="delete">Zmazať</string>
+    <string name="location_deleted">Lokácia bola zmazaná.</string>
+    <string name="location_edited">Lokácia upravená.</string>
 </resources>

@@ -254,7 +254,7 @@ fun AddItemScreen(navController: NavController) {
                     description = descriptionState.value.ifBlank {
                         context.getString(R.string.no_desc_added) },
                     locationId = locId,
-                    imageUri = imageUriState.value?.toString() ?: ""
+                    imageUri = imageUriState.value?.toString()
                 )
                 coroutineScope.launch {
                     db.itemDao().insertItem(item)

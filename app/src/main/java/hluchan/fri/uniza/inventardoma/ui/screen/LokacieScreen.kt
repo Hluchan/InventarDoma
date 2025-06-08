@@ -22,10 +22,15 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,7 +55,9 @@ import hluchan.fri.uniza.inventardoma.ui.viewmodel.LokacieScreenViewModel
 import hluchan.fri.uniza.inventardoma.ui.viewmodel.factory.LokacieViewModelFactory
 
 /**
- * TODO - napisat popis
+ * ukazuje ulozene lokacie v DB
+ *
+ * snackbar zobrazi ci sa ukladanie editu alebo zmazanie podarilo
  */
 @Composable
 fun LokacieScreen(
@@ -63,40 +70,56 @@ fun LokacieScreen(
 
     val locations by viewModel.lokacie.collectAsState(initial = emptyList())
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        // Hlavicka
-        Text(
-            text = stringResource(id = R.string.lokacieScreen_label),
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(start = 16.dp, top = 24.dp, bottom = 8.dp, end = 16.dp)
-                .fillMaxWidth(),
-            color = MaterialTheme.colorScheme.onBackground
-        )
+    val snackbarHostState = remember { SnackbarHostState() }
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    LaunchedEffect(savedStateHandle?.get<String>("snackbar_message")) {
+        savedStateHandle?.get<String>("snackbar_message")?.let { message ->
+            snackbarHostState.showSnackbar(message)
+            savedStateHandle.remove<String>("snackbar_message")
+        }
+    }
 
-        // Zoznam lokacií
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
         ) {
-            item {
-                AddLocationCard {
-                    navController.navigate("addLocation")
+            // Hlavicka
+            Text(
+                text = stringResource(id = R.string.lokacieScreen_label),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 24.dp, bottom = 8.dp, end = 16.dp)
+                    .fillMaxWidth(),
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            // Zoznam lokacií
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                item {
+                    AddLocationCard {
+                        navController.navigate("addLocation")
+                    }
+                }
+
+                items(locations) { location ->
+                    LocationCard(
+                        location = location,
+                        onClick = {
+                            navController.navigate("editLocation/${location.id}")
+                        }
+                    )
                 }
             }
-
-            items(locations) { location ->
-                LocationCard(
-                    location = location,
-                    onClick = { /* TODO navigácia */ }
-                )
-            }
-
         }
     }
 }
@@ -158,7 +181,6 @@ fun LocationCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(16.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -169,7 +191,7 @@ fun LocationCard(
                 painter = getIconPainter(location.iconName),
                 contentDescription = "Ikona lokácie",
                 modifier = Modifier
-                    .size(64.dp) //TODO mozno dat 48??
+                    .size(64.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant)
                     .padding(8.dp),

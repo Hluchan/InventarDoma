@@ -176,7 +176,7 @@ fun ItemCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // cely tento if riesi to ze ked nie je obrazok tak tam da placeholder vo farbe temy
-            if (item.imageUri != null) {
+            if (!item.imageUri.isNullOrBlank()) {
                 AsyncImage(
                     model = item.imageUri,
                     contentDescription = "Obrázok položky",
