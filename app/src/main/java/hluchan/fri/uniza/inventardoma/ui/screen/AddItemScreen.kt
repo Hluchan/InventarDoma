@@ -27,8 +27,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -57,19 +57,19 @@ fun AddItemScreen(navController: NavController) {
     val db = AppDatabase.getInstance(context)
     val coroutineScope = rememberCoroutineScope()
 
-    val nameState = remember { mutableStateOf("") }
-    val nameError = remember { mutableStateOf(false) }
-    val categoryState = remember { mutableStateOf("") }
-    val descriptionState = remember { mutableStateOf("") }
+    val nameState = rememberSaveable { mutableStateOf("") }
+    val nameError = rememberSaveable { mutableStateOf(false) }
+    val categoryState = rememberSaveable { mutableStateOf("") }
+    val descriptionState = rememberSaveable { mutableStateOf("") }
 
     // lokacie z db
     val locations by db
         .locationDao().getAllLocations()
         .collectAsState(initial = emptyList())
-    val selectedLocation = remember { mutableStateOf<Int?>(null) }
-    var expanded by remember { mutableStateOf(false) }
+    val selectedLocation = rememberSaveable { mutableStateOf<Int?>(null) }
+    var expanded by rememberSaveable { mutableStateOf(false) }
 
-    val imageUriState = remember { mutableStateOf<Uri?>(null) }
+    val imageUriState = rememberSaveable { mutableStateOf<Uri?>(null) }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->

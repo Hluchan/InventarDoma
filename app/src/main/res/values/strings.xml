@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Inventarizácia Domácnosti</string>
+    <string name="app_name">Inventár Doma</string>
     <string name="lokacieScreen_label">Lokácie</string>
     <string name="inventarScreen_label">Inventár</string>
     <string name="screen3_label">Kalendár</string>
@@ -18,4 +18,10 @@
     <string name="delete">Zmazať</string>
     <string name="location_deleted">Lokácia bola zmazaná.</string>
     <string name="location_edited">Lokácia upravená.</string>
+    <string name="borrowed_to">Požičané: %1$s</string>
+    <string name="return_date_label">Vrátiť do: %1$s</string>
+    <string name="kalendar_no_items">Žiadne požičané položky</string>
+    <string name="item_edited">Položka upravená.</string>
+    <string name="item_deleted">Položka bola zmazaná.</string>
+    <string name="edit_item">Upraviť položku</string>
 </resources>

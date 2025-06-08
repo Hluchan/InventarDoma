@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import hluchan.fri.uniza.inventardoma.ui.navigation.AppBottomNavigationBar
 import hluchan.fri.uniza.inventardoma.ui.screen.AddItemScreen
 import hluchan.fri.uniza.inventardoma.ui.screen.AddLocationScreen
+import hluchan.fri.uniza.inventardoma.ui.screen.EditDetailItemScreen
 import hluchan.fri.uniza.inventardoma.ui.screen.EditDetailLocationScreen
 import hluchan.fri.uniza.inventardoma.ui.screen.InventarScreen
 import hluchan.fri.uniza.inventardoma.ui.screen.KalendarScreen
@@ -72,8 +73,14 @@ fun MainScreen() {
                     )
                 }
             }
+            composable("editItem/{itemId}") { backStackEntry ->
+                val itemId = backStackEntry.arguments?.getString("itemId")?.toIntOrNull()
+                if (itemId != null) {
+                    EditDetailItemScreen(navController = navController, itemId = itemId)
+                }
+            }
             composable("kalendar") {
-                KalendarScreen()
+                KalendarScreen(navController)
             }
         }
     }

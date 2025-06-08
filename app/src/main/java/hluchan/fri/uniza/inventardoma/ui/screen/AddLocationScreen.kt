@@ -25,8 +25,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,17 +54,17 @@ fun AddLocationScreen(
     val db = AppDatabase.getInstance(context)
     val coroutineScope = rememberCoroutineScope()
 
-    val nameState = remember { mutableStateOf("") }
-    val showNameError = remember { mutableStateOf(false) }
-    val descriptionState = remember { mutableStateOf("") }
+    val nameState = rememberSaveable { mutableStateOf("") }
+    val showNameError = rememberSaveable { mutableStateOf(false) }
+    val descriptionState = rememberSaveable { mutableStateOf("") }
 
     val iconOption = listOf(
         "Home", "Living Room", "Work", "School", "Warehouse", "Garage",
         "Kitchen", "Bathroom", "Toilet", "Bedroom", "Office", "Closet",
         "Library", "Utility"
     )
-    var expanded by remember { mutableStateOf(false) }
-    var selectedIcon by remember { mutableStateOf("") }
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    var selectedIcon by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = Modifier

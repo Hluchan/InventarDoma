@@ -25,13 +25,18 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,10 +77,19 @@ fun InventarScreen(
     val context = LocalContext.current
     val db = AppDatabase.getInstance(context)
     val factory = InventarViewModelFactory(db.itemDao())
+    val snackbarHostState = remember { SnackbarHostState() }
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+
+    LaunchedEffect(savedStateHandle?.get<String>("snackbar_message")) {
+        savedStateHandle?.get<String>("snackbar_message")?.let { message ->
+            snackbarHostState.showSnackbar(message)
+            savedStateHandle.remove<String>("snackbar_message")
+        }
+    }
 
     val viewModel: InventarScreenViewModel = viewModel(factory = factory)
 
-    var searchQuery by remember { mutableStateOf("") }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
     // bezpecne nacitanie z viewmodelu
     val items by viewModel.items.collectAsState(initial = emptyList())
 
@@ -83,43 +97,47 @@ fun InventarScreen(
         it.name.contains(searchQuery, ignoreCase = true)
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        Text(
-            text = stringResource(id = R.string.inventarScreen_label),
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(start = 16.dp, top = 24.dp, bottom = 8.dp, end = 16.dp)
-                .fillMaxWidth()
-        )
-
-        SearchBarComposable(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            onSearch = { searchQuery = it }
-        )
-
-        // zoznam poloziek
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
         ) {
-            //zobrazit pridavaciu kartu VZDY ako prvu
-            item {
-                AddItemCard(
-                    onClick = { navController.navigate("addItem") }
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.inventarScreen_label),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 24.dp, bottom = 8.dp, end = 16.dp)
+                    .fillMaxWidth()
+            )
 
-            items(filteredItems) { actualItem ->
-                ItemCard(
-                    item = actualItem,
-                    onClick = { navController.navigate("edit_item/${actualItem.id}") })
-            }
+            SearchBarComposable(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onSearch = { searchQuery = it }
+            )
 
+            // zoznam poloziek
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                //zobrazit pridavaciu kartu VZDY ako prvu
+                item {
+                    AddItemCard(
+                        onClick = { navController.navigate("addItem") }
+                    )
+                }
+
+                items(filteredItems) { actualItem ->
+                    ItemCard(
+                        item = actualItem,
+                        onClick = { navController.navigate("editItem/${actualItem.id}") })
+                }
+
+            }
         }
     }
 }
@@ -133,7 +151,7 @@ fun SearchBarComposable(
     modifier: Modifier,
     onSearch: (String) -> Unit
 ) {
-    var searchText by remember { mutableStateOf("") }
+    var searchText by rememberSaveable { mutableStateOf("") }
 
     TextField(
         value = searchText,
