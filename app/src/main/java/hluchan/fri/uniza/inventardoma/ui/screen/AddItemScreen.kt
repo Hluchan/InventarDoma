@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -76,10 +78,14 @@ fun AddItemScreen(navController: NavController) {
         imageUriState.value = uri
     }
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(scrollState),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         // hlava sekcie
         Text(
@@ -119,7 +125,6 @@ fun AddItemScreen(navController: NavController) {
         )
 
         // Kategoria
-        Spacer(Modifier.height(8.dp))
         TextField(
             value = categoryState.value,
             onValueChange = { categoryState.value = it },
@@ -137,7 +142,6 @@ fun AddItemScreen(navController: NavController) {
         )
 
         // Popis
-        Spacer(Modifier.height(8.dp))
         TextField(
             value = descriptionState.value,
             onValueChange = { descriptionState.value = it },
@@ -156,7 +160,6 @@ fun AddItemScreen(navController: NavController) {
         )
 
         // Lokacia
-        Spacer(Modifier.height(8.dp))
         ExposedDropdownMenuBox(
             expanded = expanded,
             onExpandedChange = { expanded = !expanded },
@@ -208,7 +211,6 @@ fun AddItemScreen(navController: NavController) {
         }
 
         // Vyber fotky
-        Spacer(Modifier.height(8.dp))
         Button(
             onClick = { launcher.launch("image/*") },
             shape = MaterialTheme.shapes.small,
@@ -239,7 +241,6 @@ fun AddItemScreen(navController: NavController) {
         }
 
         // Ulozit polozku
-        Spacer(Modifier.height(16.dp))
         Button(
             onClick = {
                 if (nameState.value.isBlank()) {

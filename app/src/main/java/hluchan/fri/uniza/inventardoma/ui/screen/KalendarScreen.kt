@@ -14,7 +14,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,6 +35,7 @@ import hluchan.fri.uniza.inventardoma.database.entity.ItemEntity
 import hluchan.fri.uniza.inventardoma.ui.theme.AppTheme
 import hluchan.fri.uniza.inventardoma.ui.viewmodel.KalendarScreenViewModel
 import hluchan.fri.uniza.inventardoma.ui.viewmodel.factory.KalendarViewModelFactory
+import kotlinx.coroutines.launch
 
 @Composable
 fun KalendarScreen(
@@ -43,6 +47,21 @@ fun KalendarScreen(
     val viewModel: KalendarScreenViewModel = viewModel(factory = factory)
 
     val items = viewModel.borrowedItems.collectAsState(initial = emptyList()).value
+
+    val snackbarHostState = remember { androidx.compose.material3.SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
+    // snackbar handler
+    LaunchedEffect(Unit) {
+        navController.currentBackStackEntry
+            ?.savedStateHandle
+            ?.remove<String>("snackbar_message")
+            ?.let { message ->
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(message)
+                }
+            }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()

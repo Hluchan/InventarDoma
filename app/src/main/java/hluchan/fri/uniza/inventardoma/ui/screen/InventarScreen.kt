@@ -80,10 +80,9 @@ fun InventarScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
 
-    LaunchedEffect(savedStateHandle?.get<String>("snackbar_message")) {
-        savedStateHandle?.get<String>("snackbar_message")?.let { message ->
+    LaunchedEffect(Unit) {
+        savedStateHandle?.remove<String>("snackbar_message")?.let { message ->
             snackbarHostState.showSnackbar(message)
-            savedStateHandle.remove<String>("snackbar_message")
         }
     }
 

@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -68,11 +69,17 @@ fun EditDetailItemScreen(
 
     val locations by db.locationDao().getAllLocations().collectAsState(initial = emptyList())
 
+    val selectedLocation = rememberSaveable { mutableStateOf<Int?>(null) }
+
+    LaunchedEffect(currentItem) {
+        if (currentItem != null && selectedLocation.value == null) {
+            selectedLocation.value = currentItem.locationId
+        }
+    }
+
     val nameState = rememberSaveable { mutableStateOf(currentItem?.name ?: "") }
-    val nameError = rememberSaveable { mutableStateOf(false) }
     val categoryState = rememberSaveable { mutableStateOf(currentItem?.category ?: "") }
     val descriptionState = rememberSaveable { mutableStateOf(currentItem?.description ?: "") }
-    val selectedLocation = rememberSaveable { mutableStateOf(currentItem?.locationId) }
     var expanded by rememberSaveable { mutableStateOf(false) }
     val imageUriState = rememberSaveable {
         mutableStateOf<Uri?>(currentItem?.imageUri?.let { Uri.parse(it) })
@@ -126,16 +133,7 @@ fun EditDetailItemScreen(
                             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                         ),
-                        singleLine = true,
-                        isError = nameError.value,
-                        supportingText = {
-                            if (nameError.value) {
-                                Text(
-                                    text = stringResource(id = R.string.name_error),
-                                    color = MaterialTheme.colorScheme.error
-                                )
-                            }
-                        }
+                        singleLine = true
                     )
                 }
 
@@ -270,14 +268,10 @@ fun EditDetailItemScreen(
                 item {
                     Button(
                         onClick = {
-                            if (nameState.value.trim().isBlank()) {
-                                nameError.value = true
-                                return@Button
-                            }
-                            val locId = selectedLocation.value ?: return@Button
+                            val locId = selectedLocation.value ?: currentItem?.locationId ?: return@Button
                             val item = ItemEntity(
                                 id = itemId,
-                                name = nameState.value.trim(),
+                                name = nameState.value.trim().ifBlank { currentItem?.name ?: "" },
                                 category = categoryState.value.trim(),
                                 description = descriptionState.value.ifBlank {
                                     context.getString(R.string.no_desc_added)
@@ -290,9 +284,6 @@ fun EditDetailItemScreen(
                             )
                             coroutineScope.launch {
                                 db.itemDao().insertItem(item)
-                                launch {
-                                    snackbarHostState.showSnackbar(context.getString(R.string.item_edited))
-                                }
                                 navController.previousBackStackEntry?.savedStateHandle?.set(
                                     "snackbar_message",
                                     context.getString(R.string.item_edited)
@@ -325,9 +316,6 @@ fun EditDetailItemScreen(
                             coroutineScope.launch {
                                 currentItem?.let { item ->
                                     db.itemDao().deleteItem(item)
-                                    launch {
-                                        snackbarHostState.showSnackbar(context.getString(R.string.item_deleted))
-                                    }
                                     navController.previousBackStackEntry?.savedStateHandle?.set(
                                         "snackbar_message",
                                         context.getString(R.string.item_deleted)
