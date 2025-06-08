@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Inventarizácia Domácnosti</string>
+    <string name="lokacieScreen_label">Lokácie</string>
+    <string name="inventarScreen_label">Inventár</string>
+    <string name="screen3_label">Kalendár</string>
+    <string name="addItem_label">Pridaj položku</string>
+</resources>
