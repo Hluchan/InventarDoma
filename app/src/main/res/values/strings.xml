@@ -18,8 +18,8 @@
     <string name="delete">Zmazať</string>
     <string name="location_deleted">Lokácia bola zmazaná.</string>
     <string name="location_edited">Lokácia upravená.</string>
-    <string name="borrowed_to">Požičané: %1$s</string>
-    <string name="return_date_label">Vrátiť do: %1$s</string>
+    <string name="borrowed_to">Požičané: </string>
+    <string name="return_date_label">Vrátiť do: </string>
     <string name="kalendar_no_items">Žiadne požičané položky</string>
     <string name="item_edited">Položka upravená.</string>
     <string name="item_deleted">Položka bola zmazaná.</string>

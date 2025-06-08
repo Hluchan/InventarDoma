@@ -7,13 +7,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -35,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -51,6 +56,11 @@ import hluchan.fri.uniza.inventardoma.database.AppDatabase
 import hluchan.fri.uniza.inventardoma.database.entity.ItemEntity
 import hluchan.fri.uniza.inventardoma.ui.theme.AppTheme
 import kotlinx.coroutines.launch
+import android.app.DatePickerDialog
+import androidx.compose.foundation.clickable
+import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @SuppressLint("UseKtx")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,15 +81,30 @@ fun EditDetailItemScreen(
 
     val selectedLocation = rememberSaveable { mutableStateOf<Int?>(null) }
 
-    LaunchedEffect(currentItem) {
-        if (currentItem != null && selectedLocation.value == null) {
-            selectedLocation.value = currentItem.locationId
-        }
-    }
-
     val nameState = rememberSaveable { mutableStateOf(currentItem?.name ?: "") }
     val categoryState = rememberSaveable { mutableStateOf(currentItem?.category ?: "") }
     val descriptionState = rememberSaveable { mutableStateOf(currentItem?.description ?: "") }
+
+    val isBorrowedState = rememberSaveable { mutableStateOf(currentItem?.isBorrowed == true) }
+    val borrowedToState = rememberSaveable { mutableStateOf(currentItem?.borrowedTo ?: "") }
+
+    val calendar = rememberSaveable { Calendar.getInstance() }
+    val dateFormat = rememberSaveable { SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()) }
+    val returnDateState = rememberSaveable { mutableStateOf(currentItem?.returnDate ?: "") }
+
+    // parsovanie predosleho datumu
+    LaunchedEffect(Unit) {
+        try {
+            if (returnDateState.value.isNotBlank()) {
+                dateFormat.parse(returnDateState.value)?.let {
+                    calendar.time = it
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     var expanded by rememberSaveable { mutableStateOf(false) }
     val imageUriState = rememberSaveable {
         mutableStateOf<Uri?>(currentItem?.imageUri?.let { Uri.parse(it) })
@@ -88,6 +113,24 @@ fun EditDetailItemScreen(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         imageUriState.value = uri
+    }
+
+    // aby ostali z itemu hodnoty vo fieldoch
+    var initialized by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(currentItem) {
+        if (currentItem != null && !initialized) {
+            nameState.value = currentItem.name
+            categoryState.value = currentItem.category ?: ""
+            descriptionState.value = currentItem.description ?: ""
+            selectedLocation.value = currentItem.locationId
+            isBorrowedState.value = currentItem.isBorrowed
+            borrowedToState.value = currentItem.borrowedTo ?: ""
+            returnDateState.value = currentItem.returnDate ?: ""
+            imageUriState.value = currentItem.imageUri?.let { Uri.parse(it) }
+
+            initialized = true
+        }
     }
 
     Scaffold(
@@ -229,6 +272,76 @@ fun EditDetailItemScreen(
                     }
                 }
 
+                // check ci je pozicane
+                item {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    ) {
+                        Checkbox(
+                            checked = isBorrowedState.value,
+                            onCheckedChange = { isBorrowedState.value = it }
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = stringResource(R.string.is_borrowed),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+
+                // ak je pozicane tak komu
+                if (isBorrowedState.value) {
+                    item {
+                        TextField(
+                            value = borrowedToState.value,
+                            onValueChange = { borrowedToState.value = it },
+                            label = { Text(stringResource(R.string.borrowed_to_name)) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            singleLine = true,
+                            colors = TextFieldDefaults.colors(
+                                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            )
+                        )
+                    }
+
+                    //datum navratu
+                    item {
+                        TextField(
+                            value = returnDateState.value,
+                            onValueChange = {},
+                            label = { Text(stringResource(R.string.return_date_label)) },
+                            readOnly = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .clickable {
+                                    DatePickerDialog(
+                                        context,
+                                        { _, year, month, dayOfMonth ->
+                                            calendar.set(year, month, dayOfMonth)
+                                            returnDateState.value = dateFormat.format(calendar.time)
+                                        },
+                                        calendar.get(Calendar.YEAR),
+                                        calendar.get(Calendar.MONTH),
+                                        calendar.get(Calendar.DAY_OF_MONTH)
+                                    ).show()
+                                },
+                            colors = TextFieldDefaults.colors(
+                                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            )
+                        )
+                    }
+                }
+
                 // Vyber obrázku
                 item {
                     Button(
@@ -278,9 +391,9 @@ fun EditDetailItemScreen(
                                 },
                                 locationId = locId,
                                 imageUri = imageUriState.value?.toString(),
-                                isBorrowed = currentItem?.isBorrowed == true,
-                                borrowedTo = currentItem?.borrowedTo,
-                                returnDate = currentItem?.returnDate
+                                isBorrowed = isBorrowedState.value,
+                                borrowedTo = if (isBorrowedState.value) borrowedToState.value else null,
+                                returnDate = if (isBorrowedState.value) returnDateState.value else null
                             )
                             coroutineScope.launch {
                                 db.itemDao().insertItem(item)
