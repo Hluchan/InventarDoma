@@ -1,7 +1,6 @@
 package hluchan.fri.uniza.inventardoma.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -45,9 +43,9 @@ fun AddItemScreen(navController: NavController) {
     val locationState = remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // hlava sekcie
         Text(
@@ -57,7 +55,8 @@ fun AddItemScreen(navController: NavController) {
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(start = 16.dp, top = 24.dp, bottom = 8.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            color = MaterialTheme.colorScheme.onBackground
         )
         // Nazov polozky
         TextField(
@@ -91,7 +90,7 @@ fun AddItemScreen(navController: NavController) {
 @Composable
 fun AddItemScreenPreview() {
     val navController = rememberNavController()
-    AppTheme(darkTheme = true) {
+    AppTheme(darkTheme = false) {
         AddItemScreen(navController = navController)
     }
 

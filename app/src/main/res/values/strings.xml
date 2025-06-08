@@ -3,5 +3,12 @@
     <string name="lokacieScreen_label">Lokácie</string>
     <string name="inventarScreen_label">Inventár</string>
     <string name="screen3_label">Kalendár</string>
-    <string name="addItem_label">Pridaj položku</string>
+    <string name="addItem_label">Pridaj novú položku</string>
+    <string name="name">Názov</string>">
+    <string name="description">Popis</string>
+    <string name="addLocation_label">Pridať novú lokáciu</string>
+    <string name="icon">Ikona</string>
+    <string name="save">Uložiť</string>
+    <string name="no_desc_added">Žiadny popis nepridaný</string>
+    <string name="name_error">Názov je povinný!</string>
 </resources>

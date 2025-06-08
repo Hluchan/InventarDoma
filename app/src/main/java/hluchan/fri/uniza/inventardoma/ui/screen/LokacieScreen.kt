@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -47,10 +48,9 @@ import hluchan.fri.uniza.inventardoma.database.entity.LocationEntity
 import hluchan.fri.uniza.inventardoma.ui.theme.AppTheme
 import hluchan.fri.uniza.inventardoma.ui.viewmodel.LokacieScreenViewModel
 import hluchan.fri.uniza.inventardoma.ui.viewmodel.factory.LokacieViewModelFactory
-import androidx.compose.foundation.lazy.items
 
 /**
- *
+ * TODO - napisat popis
  */
 @Composable
 fun LokacieScreen(
@@ -74,7 +74,8 @@ fun LokacieScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(start = 16.dp, top = 24.dp, bottom = 8.dp, end = 16.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         // TODO - search??
@@ -179,7 +180,9 @@ fun LocationCard(
             Spacer(modifier = Modifier.width(16.dp))
 
             Column {
-                Text(location.name, style = MaterialTheme.typography.titleMedium)
+                Text(location.name,
+                    style = MaterialTheme.typography.titleMedium
+                )
                 location.description?.let {
                     Text(
                         text = it,
@@ -220,7 +223,7 @@ fun getIconPainter(iconName: String?): Painter {
 @Preview(showBackground = true)
 @Composable
 fun LokacieScreenPreview() {
-    AppTheme {
+    AppTheme(darkTheme = false) {
         val navController = rememberNavController()
         LokacieScreen(navController = navController)
     }
